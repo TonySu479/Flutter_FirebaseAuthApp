@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
 import 'package:libero/models/decorations.dart';
 import 'package:libero/services/auth.dart';
 import 'package:libero/shared/loading.dart';
@@ -193,15 +194,19 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  void hello() {
+    print('hello');
+  }
+
   Widget _buildSocialBtnRow() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildSocialBtn(() => ('Login with Facebook'),
+          _buildSocialBtn(() => (hello()),
               AssetImage('assets/logos/facebook.jpg')),
-          _buildSocialBtn(() => ('Login with Google'),
+          _buildSocialBtn(() => (_auth.googleSignIn()),
               AssetImage('assets/logos/google.jpg')),
         ],
       ),
