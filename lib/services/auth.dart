@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:libero/models/global.dart';
 import 'package:libero/models/user.dart';
+import 'database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   // create user obj based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
@@ -32,6 +33,7 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+      isNewUser = false;
       FirebaseUser user = result.user;
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -45,7 +47,13 @@ class AuthService {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      isNewUser = true;
       FirebaseUser user = result.user;
+
+      // create a new document for the user with the uid
+      await DatabaseService(uid: user.uid)
+          .updateUserData('name', '0', 'gender');
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -73,6 +81,4 @@ class AuthService {
       print(e);
     }
   }
-
-  
 }

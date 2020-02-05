@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:libero/models/decorations.dart';
+import 'decorations.dart';
 
 class Loading extends StatelessWidget {
   @override

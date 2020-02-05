@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-import 'package:libero/models/decorations.dart';
 import 'package:libero/services/auth.dart';
+import 'package:libero/shared/decorations.dart';
 import 'package:libero/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
@@ -124,7 +123,9 @@ class _SignInState extends State<SignIn> {
         elevation: 5.0,
         onPressed: () async {
           if (_formKey.currentState.validate()) {
-            setState(() => loading = true);
+            setState(() {
+              loading = true;
+            });
             dynamic result =
                 await _auth.signInWithEmailAndPassword(email, password);
             if (result == null) {
@@ -204,8 +205,8 @@ class _SignInState extends State<SignIn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildSocialBtn(() => (hello()),
-              AssetImage('assets/logos/facebook.jpg')),
+          _buildSocialBtn(
+              () => (hello()), AssetImage('assets/logos/facebook.jpg')),
           _buildSocialBtn(() => (_auth.googleSignIn()),
               AssetImage('assets/logos/google.jpg')),
         ],
@@ -245,64 +246,66 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Form(
-          key: _formKey,
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: backgroundDec,
-                ),
-                Container(
-                  height: double.infinity,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40.0,
-                      vertical: 120.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'OpenSans',
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
+    return loading
+        ? Loading()
+        : Scaffold(
+            body: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle.light,
+              child: Form(
+                key: _formKey,
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        decoration: backgroundDec,
+                      ),
+                      Container(
+                        height: double.infinity,
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical: 120.0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 30.0),
+                              _buildEmailTF(),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              _buildPasswordTF(),
+                              _buildForgotPasswordBtn(),
+                              _buildRememberMeCheckbox(),
+                              _buildLoginBtn(),
+                              Text(error,
+                                  style: TextStyle(
+                                      color: Colors.yellow, fontSize: 14.0)),
+                              _buildSignInWithText(),
+                              _buildSocialBtnRow(),
+                              _buildSignupBtn(),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 30.0),
-                        _buildEmailTF(),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        _buildPasswordTF(),
-                        _buildForgotPasswordBtn(),
-                        _buildRememberMeCheckbox(),
-                        _buildLoginBtn(),
-                        Text(error,
-                            style: TextStyle(
-                                color: Colors.yellow, fontSize: 14.0)),
-                        _buildSignInWithText(),
-                        _buildSocialBtnRow(),
-                        _buildSignupBtn(),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:libero/screens/authenticate/register.dart';
 import 'package:libero/screens/authenticate/sign_in.dart';
 
-
 class Authenticate extends StatefulWidget {
   @override
   _AuthenticateState createState() => _AuthenticateState();

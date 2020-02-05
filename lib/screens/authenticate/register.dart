@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:libero/models/decorations.dart';
 import 'package:libero/services/auth.dart';
+import 'package:libero/shared/decorations.dart';
 import 'package:libero/shared/loading.dart';
 
 class Register extends StatefulWidget {
@@ -55,7 +55,9 @@ class _RegisterState extends State<Register> {
         elevation: 5.0,
         onPressed: () async {
           if (_formKey.currentState.validate()) {
-            setState(() => loading = true);
+            setState(() {
+              loading = true;
+            });
             dynamic result =
                 await _auth.registerWithEmailAndPassword(email, password);
             if (result == null) {
@@ -144,62 +146,64 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Form(
-          key: _formKey,
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: backgroundDec,
-                ),
-                Container(
-                  height: double.infinity,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40.0,
-                      vertical: 120.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'OpenSans',
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
+    return loading
+        ? Loading()
+        : Scaffold(
+            body: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle.light,
+              child: Form(
+                key: _formKey,
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        decoration: backgroundDec,
+                      ),
+                      Container(
+                        height: double.infinity,
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical: 120.0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 30.0),
+                              _buildEmailTF(),
+                              SizedBox(height: 30.0),
+                              _buildPasswordTF(),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              _buildSignUpBtn(),
+                              Text(error,
+                                  style: TextStyle(
+                                      color: Colors.yellow, fontSize: 14.0)),
+                              SizedBox(height: 20.0),
+                              _buildSignInBtn(),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 30.0),
-                        _buildEmailTF(),
-                        SizedBox(height: 30.0),
-                        _buildPasswordTF(),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        _buildSignUpBtn(),
-                        Text(error,
-                            style: TextStyle(
-                                color: Colors.yellow, fontSize: 14.0)),
-                        SizedBox(height: 20.0),
-                        _buildSignInBtn(),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
